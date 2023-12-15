@@ -1,0 +1,39 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:appName/feature/example/controller/example_controller.dart';
+import 'package:appName/core/base/base.view.dart';
+import 'package:appName/core/widget/custom_app_bar.dart';
+
+class ExampleScreen extends BaseView<ExampleController> {
+  const ExampleScreen({super.key});
+
+  @override
+  PreferredSizeWidget? appBar(BuildContext context) {
+    return CustomAppBar(appBarTitleText: "Example Page");
+  }
+
+  @override
+  Widget body(BuildContext context) {
+    return Container(
+        padding: const EdgeInsets.all(20),
+        child: Obx(() {
+          return Column(
+            children: controller.exampleList.map<Widget>((user) {
+              return Card(
+                child: ListTile(
+                  onTap: () {
+
+                  },
+                  leading: CircleAvatar(
+                    backgroundImage: NetworkImage(user.avatar),
+                  ),
+                  title: Text(user.firstName),
+                  subtitle: Text(user.email),
+                ),
+              );
+            }).toList(),
+          );
+        })
+    );
+  }
+}

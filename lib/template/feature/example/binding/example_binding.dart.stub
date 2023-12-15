@@ -1,0 +1,14 @@
+import 'package:get/get.dart';
+import 'package:appName/feature/example/controller/example_controller.dart';
+import 'package:appName/repository/example_repository.dart';
+
+class ExampleBinding extends Bindings{
+  @override
+  void dependencies() {
+    Get.lazyPut(() => ExampleController());
+    Get.lazyPut(() =>
+            ExampleRepository(),
+            tag: (ExampleRepository).toString());
+  }
+
+}
