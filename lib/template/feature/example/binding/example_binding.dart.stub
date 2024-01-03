@@ -5,10 +5,10 @@ import 'package:appName/repository/example_repository.dart';
 class ExampleBinding extends Bindings{
   @override
   void dependencies() {
-    Get.lazyPut(() => ExampleController());
+    Get.lazyPut(() => ExampleController(), fenix: true);
     Get.lazyPut(() =>
             ExampleRepository(),
-            tag: (ExampleRepository).toString());
+            tag: (ExampleRepository).toString(), fenix: true);
   }
 
 }
