@@ -20,8 +20,8 @@ class ApiClient {
     _dio = Dio(
       BaseOptions(
         baseUrl: isAuth ? K.baseUrlUser : K.baseUrlCore,
-        connectTimeout: 5000,
-        receiveTimeout: 3000,
+        connectTimeout: Duration(milliseconds: 20000),
+        receiveTimeout: Duration(milliseconds: 20000),
       ),
     )..interceptors.add(
         PrettyDioLogger(

@@ -99,7 +99,7 @@ Future<void> main(List<String> args) async {
 
   // ADD SERVICE
   String serviceContent = File("$servicePath/api_client.dart.stub").readAsStringSync();
-  String serviceFile = "$serviceAppPath/api_client.dart";
+  String serviceFile = "$serviceAppPath/api_client.dart.stub";
   if (!Directory(serviceAppPath).existsSync()) {
     print("CREATE FOLDER => $serviceAppPath");
     Directory(serviceAppPath).createSync(recursive: true);
