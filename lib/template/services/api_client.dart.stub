@@ -60,8 +60,8 @@ class ApiClient {
         queryParameters: queryParameters,
       );
       return response;
-    } on DioError catch (e) {
-      if (e.type == DioErrorType.connectTimeout) {
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionTimeout) {
         throw ('Connection Time Out');
       }
       throw (await _handleError(e));
@@ -84,8 +84,8 @@ class ApiClient {
         options: Options(headers: headers),
       );
       return response;
-    } on DioError catch (e) {
-      if (e.type == DioErrorType.connectTimeout) {
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionTimeout) {
         throw ('Connection Time Out');
       }
       throw (await _handleError(e));
@@ -108,8 +108,8 @@ class ApiClient {
         options: Options(headers: headers),
       );
       return response;
-    } on DioError catch (e) {
-      if (e.type == DioErrorType.connectTimeout) {
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionTimeout) {
         throw ('Connection Time Out');
       }
       throw (await _handleError(e));
@@ -132,8 +132,8 @@ class ApiClient {
         options: Options(headers: headers),
       );
       return response;
-    } on DioError catch (e) {
-      if (e.type == DioErrorType.connectTimeout) {
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionTimeout) {
         throw ('Connection Time Out');
       }
       throw (await _handleError(e));
@@ -155,8 +155,8 @@ class ApiClient {
         options: Options(headers: headers),
       );
       return response;
-    } on DioError catch (e) {
-      if (e.type == DioErrorType.connectTimeout) {
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionTimeout) {
         throw ('Connection Time Out');
       }
       throw (await _handleError(e));
@@ -183,7 +183,7 @@ class ApiClient {
     return postData(endpoint, formData, headers: headers);
   }
 
-  Future<String> _handleError(DioError e) async {
+  Future<String> _handleError(DioException e) async {
     String errorConnection = "Failed host lookup";
     String unreachable = "Network is unreachable";
     if (e.error.toString().contains(errorConnection) ||
