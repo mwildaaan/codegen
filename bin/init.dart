@@ -53,16 +53,22 @@ Future<void> main(List<String> args) async {
   String libPath = "$location/lib";
   String servicePath = "$libPath/template/services";
   String constantPath = "$libPath/template/constants";
+  String flavorsPath = "$libPath/template/flavors";
   String corePath = "$libPath/template/core";
   String othersPath = "$libPath/template";
   String serviceAppPath = "$appRootFolder/lib/services";
   String constantAppPath = "$appRootFolder/lib/constants";
+  String flavorsAppPath = "$appRootFolder/lib/flavors";
   String coreAppPath = "$appRootFolder/lib/core";
   String libAppPath = "$appRootFolder/lib";
   String routerAppPath = "$libAppPath/route";
   var pubSpec = jsonDecode(jsonEncode(doc));
-  for (var e in packages) {
+  pubSpec["environment"][sdk.name] = sdk.version;
+  for (var e in dependencies) {
     pubSpec["dependencies"][e.name] = e.version;
+  }
+  for (var e in dev_dependencies) {
+    pubSpec["dev_dependencies"][e.name] = e.version;
   }
 
   // CREATE PUBSPEC ASSETS
@@ -108,7 +114,7 @@ Future<void> main(List<String> args) async {
   File(serviceFile).writeAsStringSync(serviceContent.replaceAll("appName", appName));
 
   // ADD CANONCIAL_PATH
-  String canocialContent = File("$constantPath/canoncial_path.dart").readAsStringSync();
+  String canocialContent = File("$constantPath/canoncial_path.dart.stub").readAsStringSync();
   String canoncialFile = "$constantAppPath/canoncial_path.dart";
   if (!Directory(constantAppPath).existsSync()) {
     print("CREATE FOLDER => $constantAppPath");
@@ -117,18 +123,48 @@ Future<void> main(List<String> args) async {
   print("Create File CANONCIAL $canoncialFile");
   File(canoncialFile).writeAsStringSync(canocialContent);
 
-  // ADD ENV
-  String envContent = File("$constantPath/env.dart").readAsStringSync();
-  String envFile = "$constantAppPath/env.dart";
-  if (!Directory(constantAppPath).existsSync()) {
-    print("CREATE FOLDER => $constantAppPath");
-    Directory(constantAppPath).createSync(recursive: true);
+  // ADD INITIALIZER
+  String initializerContent = File("$corePath/base/initializer.dart.stub").readAsStringSync();
+  String initializerFile = "$coreAppPath/base/initializer.dart";
+  if (!Directory("$coreAppPath/base").existsSync()) {
+    print("CREATE FOLDER => $flavorsAppPath");
+    Directory("$coreAppPath/base").createSync(recursive: true);
   }
-  print("Create File ENV $envFile");
-  File(envFile).writeAsStringSync(envContent);
+  print("Create File INITIALIZER $initializerFile");
+  File(initializerFile).writeAsStringSync(initializerContent.replaceAll("appName", appName));
+
+  // ADD BUILD CONFIG
+  String buildConfigContent = File("$flavorsPath/build_config.dart.stub").readAsStringSync();
+  String buildConfigFile = "$flavorsAppPath/build_config.dart";
+  if (!Directory(flavorsAppPath).existsSync()) {
+    print("CREATE FOLDER => $flavorsAppPath");
+    Directory(flavorsAppPath).createSync(recursive: true);
+  }
+  print("Create File BUILD CONFIG $buildConfigFile");
+  File(buildConfigFile).writeAsStringSync(buildConfigContent.replaceAll("appName", appName));
+
+  // ADD ENV CONFIG
+  String envConfigContent = File("$flavorsPath/env_config.dart.stub").readAsStringSync();
+  String envConfigFile = "$flavorsAppPath/env_config.dart";
+  if (!Directory(flavorsAppPath).existsSync()) {
+    print("CREATE FOLDER => $flavorsAppPath");
+    Directory(flavorsAppPath).createSync(recursive: true);
+  }
+  print("Create File ENV CONFIG $envConfigFile");
+  File(envConfigFile).writeAsStringSync(envConfigContent.replaceAll("appName", appName));
+
+  // ADD ENVIRONMENT
+  String environmentContent = File("$flavorsPath/environment.dart.stub").readAsStringSync();
+  String environmentFile = "$flavorsAppPath/environment.dart";
+  if (!Directory(flavorsAppPath).existsSync()) {
+    print("CREATE FOLDER => $flavorsAppPath");
+    Directory(flavorsAppPath).createSync(recursive: true);
+  }
+  print("Create File ENVIRONMENT $environmentFile");
+  File(environmentFile).writeAsStringSync(environmentContent.replaceAll("appName", appName));
 
   // ADD ERROR MESSAGE
-  String errorContent = File("$constantPath/error_message.dart").readAsStringSync();
+  String errorContent = File("$constantPath/error_message.dart.stub").readAsStringSync();
   String errorFile = "$constantAppPath/error_message.dart";
   if (!Directory(constantAppPath).existsSync()) {
     print("CREATE FOLDER => $constantAppPath");
@@ -136,16 +172,6 @@ Future<void> main(List<String> args) async {
   }
   print("Create File ERR $errorFile");
   File(errorFile).writeAsStringSync(errorContent);
-
-  // ADD K
-  String kContent = File("$constantPath/K.dart").readAsStringSync();
-  String kFile = "$constantAppPath/K.dart";
-  if (!Directory(constantAppPath).existsSync()) {
-    print("CREATE FOLDER => $constantAppPath");
-    Directory(constantAppPath).createSync(recursive: true);
-  }
-  print("Create File K $kFile");
-  File(kFile).writeAsStringSync(kContent);
 
   // ADD BASE CONTROLLER
   String baseControllerContent = File("$corePath/base/base.controller.dart.stub").readAsStringSync();
@@ -168,7 +194,7 @@ Future<void> main(List<String> args) async {
   File(baseViewFile).writeAsStringSync(baseViewContent.replaceAll("appName", appName));
 
   // ADD MODEL BASE
-  String modelBaseContent = File("$corePath/model/page.state.dart").readAsStringSync();
+  String modelBaseContent = File("$corePath/model/page.state.dart.stub").readAsStringSync();
   String modelBaseFile = "$coreAppPath/model/page.state.dart";
   if (!Directory("$coreAppPath/model").existsSync()) {
     print("CREATE FOLDER => $coreAppPath/model");
@@ -178,7 +204,7 @@ Future<void> main(List<String> args) async {
   File(modelBaseFile).writeAsStringSync(modelBaseContent);
 
   // ADD COLOR VALUES
-  String appColorContent = File("$corePath/values/app_colors.dart").readAsStringSync();
+  String appColorContent = File("$corePath/values/app_colors.dart.stub").readAsStringSync();
   String appColorFile = "$coreAppPath/values/app_colors.dart";
   if (!Directory("$coreAppPath/values").existsSync()) {
     print("CREATE FOLDER => $coreAppPath/values");
@@ -188,7 +214,7 @@ Future<void> main(List<String> args) async {
   File(appColorFile).writeAsStringSync(appColorContent);
 
   // ADD VALUES
-  String appValuesContent = File("$corePath/values/app_values.dart").readAsStringSync();
+  String appValuesContent = File("$corePath/values/app_values.dart.stub").readAsStringSync();
   String appValuesFile = "$coreAppPath/values/app_values.dart";
   if (!Directory("$coreAppPath/values").existsSync()) {
     print("CREATE FOLDER => $coreAppPath/values");
@@ -321,12 +347,16 @@ class Package {
   Package(this.name, this.version);
 }
 
-List<Package> packages = [
-  Package("get", "^4.6.5"),
-  Package("get_storage", "^2.0.3"),
-  Package("dio", "^4.0.6"),
-  Package("shimmer", "^2.0.0"),
-  Package("pretty_dio_logger", "^1.1.1"),
-  Package("alice", "^0.3.2"),
+Package sdk = Package("sdk", ">=3.1.5 <4.0.0");
+List<Package> dependencies = [
+  Package("get", "^4.6.6"),
+  Package("get_storage", "^2.1.1"),
+  Package("dio", "^5.4.0"),
+  Package("shimmer", "^3.0.0"),
+  Package("pretty_dio_logger", "^1.3.1"),
+  Package("alice", "^0.4.1"),
   Package("intl", "^0.18.0"),
+];
+List<Package> dev_dependencies = [
+  Package("flutter_lints", "^3.0.1"),
 ];

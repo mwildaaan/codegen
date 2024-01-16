@@ -1,23 +1,18 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:appName/app/app.dart';
-import 'package:intl/date_symbol_data_local.dart';
+import 'package:appName/core/base/initializer.dart';
+import 'package:appName/flavors/build_config.dart';
+import 'package:appName/flavors/env_config.dart';
+import 'package:appName/flavors/environment.dart';
 
-import 'constants/env.dart';
 
-void main() async{
-  WidgetsFlutterBinding.ensureInitialized();
-  await GetStorage.init();
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+void main() async {
 
-  runZonedGuarded(() {
-    initializeDateFormatting().then((_) => runApp(
-        MyApp(
-          env: EnvValue.development,
-        )));
-  }, (error, stackTrace) async {});
+  await Initializer.init();
+
+  EnvConfig envConfig = EnvConfig(appsName: "", baseUrl: "https://appName-staging.codelite.id/api/v1/");
+  BuildConfig.instantiate(envType: Environment.STAG, envConfig: envConfig);
+
+  runApp(MyApp());
 }

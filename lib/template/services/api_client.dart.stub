@@ -3,23 +3,24 @@ import 'dart:io';
 
 import 'package:alice/alice.dart';
 import 'package:dio/dio.dart';
+import 'package:get/get.dart' hide Response hide FormData hide MultipartFile;
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import 'package:appName/constants/K.dart';
 import 'package:appName/constants/canoncial_path.dart';
-import 'package:appName/constants/env.dart';
 import 'package:appName/constants/error_message.dart';
 import 'package:appName/app/app.dart';
+import 'package:appName/flavors/build_config.dart';
+import 'package:appName/flavors/environment.dart';
 
 class ApiClient {
   Dio _dio = Dio();
   bool isAuth;
 
   ApiClient({this.isAuth = false}) {
-    Alice alice = Alice(navigatorKey: navigatorKey);
+    Alice alice = Alice(navigatorKey: Get.key);
 
     _dio = Dio(
       BaseOptions(
-        baseUrl: isAuth ? K.baseUrlUser : K.baseUrlCore,
+        baseUrl: BuildConfig.instance.config.baseUrl,
         connectTimeout: Duration(milliseconds: 20000),
         receiveTimeout: Duration(milliseconds: 20000),
       ),
@@ -36,7 +37,7 @@ class ApiClient {
         ),
       );
 
-    if (EnvValue.staging.config.label == "staging"){
+    if (BuildConfig.instance.environment != Environment.PROD) {
       _dio.interceptors.add(alice.getDioInterceptor());
     }
   }

@@ -1,20 +1,20 @@
 name: codegen
 description: CodeGen is Codelite Generator framework flutter project with GetX pattern Architecture
-version: 0.0.4
+version: 0.0.5
 homepage: ""
 
 environment:
   sdk: ">=3.1.5 <4.0.0"
 
 dependencies:
+  flutter:
+    sdk: flutter
   alice: ^0.4.1
   ansicolor: ^2.0.2
   dio: ^5.4.0
-  flutter:
-    sdk: flutter
   get: ^4.6.6
   get_storage: ^2.1.1
-  intl: ^0.19.0
+  intl: ^0.18.0
   json2yaml: ^3.0.1
   path: ^1.8.3
   path_provider: ^2.1.1
